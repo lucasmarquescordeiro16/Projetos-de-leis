@@ -923,4 +923,205 @@ footer a {
             <article class="project-card">
                 <div class="card-top">
                     <span class="card-number">PROJETO / 03</span>
-     
+                    <span class="card-status">Proposta</span>
+                </div>
+
+                <div class="scene">
+                    <div class="object">
+                        <div class="globe"></div>
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <h3>Terceiro Projeto de Lei</h3>
+                    <p>
+                        Uma proposta que apresenta ideias e medidas
+                        para enfrentar desafios importantes.
+                    </p>
+                </div>
+
+                <div class="card-bottom">
+                    <span class="card-category">Projeto de lei</span>
+                    <a class="view-button" href="https://www.canva.com/design/DAHYlh8H_u0/dXGBCsiRch7wTlK-obrGtA/edit" target="_blank" rel="noopener noreferrer">
+                        Visualizar projeto <span>↗</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- PROJETO 04 -->
+            <article class="project-card">
+                <div class="card-top">
+                    <span class="card-number">PROJETO / 04</span>
+                    <span class="card-status">Proposta</span>
+                </div>
+
+                <div class="scene">
+                    <div class="object building">
+                        <div class="building-roof"></div>
+                        <div class="building-body">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="building-base"></div>
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <h3>Quarto Projeto de Lei</h3>
+                    <p>
+                        Conheça mais uma iniciativa, seus fundamentos
+                        e os benefícios que pretende alcançar.
+                    </p>
+                </div>
+
+                <div class="card-bottom">
+                    <span class="card-category">Projeto de lei</span>
+                    <a class="view-button" href="https://www.canva.com/design/DAHXOiaZPSU/Gxym8mnolStqRlsIykYTxw/view?utm_content=DAHXOiaZPSU&utm_campaign=designshare&utm_medium=link&utm_source=viewer" target="_blank" rel="noopener noreferrer">
+                        Visualizar projeto <span>↗</span>
+                    </a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <section class="about reveal">
+        <div>
+            <div class="about-label">Sobre o trabalho</div>
+            <h2>Conhecimento que gera transformação.</h2>
+            <p>
+                Um projeto de lei é uma proposta apresentada para criar,
+                modificar ou revogar uma lei. Aqui você pode conhecer
+                diferentes propostas e entender suas ideias, objetivos
+                e possíveis impactos.
+            </p>
+        </div>
+
+        <div class="about-symbol">§</div>
+    </section>
+
+</main>
+
+<footer>
+    <span class="footer-brand">Projetos em Destaque</span>
+    <span>Apresentação de Projetos de Lei</span>
+    <a href="#" id="backToTop">Voltar ao início ↑</a>
+</footer>
+
+<script>
+// TEMA CLARO E ESCURO
+
+const themeButton = document.getElementById("themeButton");
+
+function atualizarTema() {
+    const temaClaro = document.body.classList.contains("light");
+    themeButton.textContent = temaClaro ? "☾" : "☀";
+}
+
+try {
+    if (localStorage.getItem("tema-site") === "claro") {
+        document.body.classList.add("light");
+    }
+} catch (erro) {}
+
+atualizarTema();
+
+themeButton.addEventListener("click", () => {
+    document.body.classList.toggle("light");
+
+    try {
+        localStorage.setItem(
+            "tema-site",
+            document.body.classList.contains("light") ? "claro" : "escuro"
+        );
+    } catch (erro) {}
+
+    atualizarTema();
+});
+
+// ANIMAÇÃO AO ROLAR
+
+const observador = new IntersectionObserver((entradas) => {
+    entradas.forEach((entrada) => {
+        if (entrada.isIntersecting) {
+            entrada.target.classList.add("visible");
+            observador.unobserve(entrada.target);
+        }
+    });
+}, {
+    threshold: 0.1
+});
+
+document.querySelectorAll(".reveal").forEach((elemento) => {
+    observador.observe(elemento);
+});
+
+// EFEITO 3D LEVE NOS CARDS
+
+const cards = document.querySelectorAll(".project-card");
+
+const possuiMouse = window.matchMedia(
+    "(hover: hover) and (pointer: fine)"
+).matches;
+
+if (possuiMouse) {
+    cards.forEach((card) => {
+        let quadroPendente = false;
+        let rotacaoX = 0;
+        let rotacaoY = 0;
+
+        card.addEventListener("mousemove", (evento) => {
+            const rect = card.getBoundingClientRect();
+
+            const x = evento.clientX - rect.left;
+            const y = evento.clientY - rect.top;
+
+            rotacaoX = ((y / rect.height) - .5) * -2;
+            rotacaoY = ((x / rect.width) - .5) * 2;
+
+            if (quadroPendente) return;
+
+            quadroPendente = true;
+
+            requestAnimationFrame(() => {
+                card.style.transform =
+                    `perspective(900px) rotateX(${rotacaoX}deg) rotateY(${rotacaoY}deg) translateY(-3px)`;
+
+                quadroPendente = false;
+            });
+        });
+
+        card.addEventListener("mouseleave", () => {
+            card.style.transform = "";
+        });
+    });
+}
+
+// PAUSAR ANIMAÇÕES QUANDO A ABA NÃO ESTIVER VISÍVEL
+
+document.addEventListener("visibilitychange", () => {
+    document.body.classList.toggle("aba-oculta", document.hidden);
+});
+
+// VOLTAR AO TOPO
+
+document.getElementById("backToTop").addEventListener("click", (evento) => {
+    evento.preventDefault();
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+});
+</script>
+
+<style>
+body.aba-oculta .ambient,
+body.aba-oculta .object {
+    animation-play-state: paused;
+}
+</style>
+
+</body>
+</html>
